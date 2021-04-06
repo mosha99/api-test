@@ -60,45 +60,46 @@ namespace api_test.Controllers
             return IpD.obj;
         }
         [HttpGet]
-        public string get(int id)
+        public string get(string function)
         {
-
+            string jvb = null;
             if (Request.IsLocal())
             {
-                if (id == 0)
+                switch (function)
                 {
-                    
-                    apicall.end();
-                    return "end succes";
-                }
-                if (id == 1)
-                {
-                    apicall.start();
-                    return "start succes";
-                }
-                if (id == 2)
-                {
+                    case "endchecker":
+                            apicall.end();
+                            jvb = "end succes";
+                        break;
 
-                    return apicall.vz().ToString();
+                    case "startchecker":
+                            apicall.start();
+                            jvb = "start succes";
+                        break;
+
+                    case "vz":
+                            jvb = apicall.vz().ToString();
+                        break;
+
+                    case "restartchecker":
+                            ReStart();
+                        break;
+
+                    case "sendmail":
+                            IpD.sendMaile = true;
+                            jvb = "succes";
+                        break;
+
+                    case "dontSendmail":
+                            IpD.sendMaile = false;
+                            jvb = "succes";
+                        break;
+
                 }
-                if (id == 3)
-                {
-                    ReStart();
-                }
-                if (id == 4)
-                {
-                    IpD.sendMaile = true;
-                    return "succes";
-                }
-                if (id == 5)
-                {
-                    IpD.sendMaile = false;
-                    return "succes";
-                }
+
+
             }
-            
-            return "error";
-
+            return jvb;
         }
         [HttpPost]
         public void post(ipob nowIp)

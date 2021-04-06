@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Mail;
 using System.Threading;
 using System.Web;
 
@@ -57,11 +58,33 @@ namespace api_test.MyClass
                         
                         ipob Ip = x.apigetip();
                         IpD.set(Ip);
+
                         if (y == null || y.ip != Ip.ip)
                         {
-                            var z = Mail.sender(new mail { head = $"my new site addres vol({cu})", body = $"my ip :{Ip.ip}", sendTo = "moshabkn.vstudio@gmail.com" });
+                            System.Net.Mail.MailMessage mail = new System.Net.Mail.MailMessage();
+
+                            SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+
+                            mail.From = new MailAddress("mosha.vstudio@gmail.com");
+
+                            mail.To.Add("moshabkn.vstudio@gmail.com");
+
+                            mail.Subject = $"my new site addres vol({cu})";
+
+                            mail.Body = $"my ip :{Ip.ip}";
+
+                            SmtpServer.Port = 587;
+
+                            SmtpServer.Credentials = new System.Net.NetworkCredential("mosha.vstudio@gmail.com", "wxvycnhpvsywzflb");
+
+                            SmtpServer.EnableSsl = true;
+
+                            SmtpServer.Send(mail);
+
                             cu++;
+
                             y = Ip;
+
                         }
 
                     }

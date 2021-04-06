@@ -19,7 +19,7 @@ namespace api_test.MyClass
         public static void start()
         {
             th = new Thread(new ThreadStart(Main));
-            to = new Thread(new ThreadStart(Main));
+            to = new Thread(new ThreadStart(TimoutCheck));
             th.Start();
             to.Start();
             
@@ -34,13 +34,16 @@ namespace api_test.MyClass
 
             return th.IsAlive;
         }
-        public void TimoutCheck()
+        private static void TimoutCheck()
         {
             DateTime Timeout;
             while (true)
             {
                 Timeout=IpD.getTimeout();
-                if (DateTime.Now > Timeout) ip2Controller.ReStart();
+                if (ip2Controller.IsConnectedToInternet())
+                {
+                     if (DateTime.Now > Timeout) ip2Controller.ReStart();
+                }
                 Thread.Sleep(2000);
             }
         }

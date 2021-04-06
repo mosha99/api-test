@@ -22,12 +22,12 @@ namespace api_test.Controllers
         public static bool sendMaile=true ;
         public static void set(ipob _obj)
         {
-            Timout = DateTime.Now.AddMinutes(1);
+            Timout = DateTime.Now.AddMinutes(3);
             obj = _obj;
         }
         public static void set()
         {
-            Timout = DateTime.Now.AddMinutes(1);
+            Timout = DateTime.Now.AddMinutes(3);
         }
         public static DateTime getTimeout()
         {

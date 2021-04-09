@@ -15,26 +15,26 @@ namespace api_test.MyClass
     public  class apicall
     {
         public static Thread th;
-        public static Thread to;
+        //public static Thread to;
         public static void start()
         {
             th = new Thread(new ThreadStart(Main));
-            to = new Thread(new ThreadStart(TimoutCheck));
+            //to = new Thread(new ThreadStart(TimoutCheck));
             th.Start();
-            to.Start();
+            //to.Start();
             
         }
         public static void end()
         {
             th.Abort();
-            to.Abort();
+            //to.Abort();
         }
         public static bool vz()
         {
 
             return th.IsAlive;
         }
-        private static void TimoutCheck()
+        /*private static void TimoutCheck()
         {
             DateTime Timeout;
             while (true)
@@ -46,27 +46,33 @@ namespace api_test.MyClass
                 }
                 Thread.Sleep(2000);
             }
-        }
+        }*/
+        static int cu ;
         private static void Main()
         {
             var x = new apicall();
             ipob y=null ;
             try
             {
-                int cu = 1;
+                ipob Ip;
+                Ip = x.apigetip();
+                IpD.set(Ip);
+                System.Net.Mail.MailMessage mail;
+                SmtpClient SmtpServer;
+
                 while (true)
                 {
                     if (ip2Controller.IsConnectedToInternet())
                     {
                         
-                        ipob Ip = x.apigetip();
-                        IpD.set(Ip);
 
                         if (y == null || y.ip != Ip.ip)
                         {
-                            System.Net.Mail.MailMessage mail = new System.Net.Mail.MailMessage();
+                            if (cu == null) cu = 1;
 
-                            SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+                            mail = new System.Net.Mail.MailMessage();
+
+                            SmtpServer = new SmtpClient("smtp.gmail.com");
 
                             mail.From = new MailAddress("mosha.vstudio@gmail.com");
 
@@ -83,7 +89,7 @@ namespace api_test.MyClass
                             SmtpServer.EnableSsl = true;
 
                             SmtpServer.Send(mail);
-
+                            
                             cu++;
 
                             y = Ip;
@@ -100,6 +106,7 @@ namespace api_test.MyClass
             catch (Exception ex)
             {
                 //x.apisetip(new ipob { ip = "error", type = ex.Message });
+                IpD.setError(ex.Message, ex.Data.Count);
                 Thread.Sleep(1000);
                 Main();
             }

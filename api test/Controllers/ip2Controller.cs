@@ -20,6 +20,7 @@ namespace api_test.Controllers
         static private DateTime Timout;
         public static ipob obj { get; set; }
         public static bool sendMaile=true ;
+        private static string error;
         public static void set(ipob _obj)
         {
             Timout = DateTime.Now.AddMinutes(3);
@@ -33,7 +34,16 @@ namespace api_test.Controllers
         {
             return Timout;
         }
-       
+        public static void setError(string error,int count)
+        {
+            error = $"error : {error} || date = {DateTime.Now.Hour }:{ DateTime.Now.Minute }:{ DateTime.Now.Second } || cu : {count}";
+        }
+        public static string getError()
+        {
+            return error;
+        }
+
+
     }
     public class ip2Controller : ApiController
     {
@@ -60,14 +70,14 @@ namespace api_test.Controllers
             return IpD.obj;
         }
         [HttpGet]
-        public string get(string function)
+        public string get(string id)
         {
             string jvb = null;
             if (Request.IsLocal())
             {
-                switch (function)
+                switch (id)
                 {
-                    case "endchecker":
+                    case "0":
                             apicall.end();
                             jvb = "end succes";
                         break;
@@ -93,6 +103,9 @@ namespace api_test.Controllers
                     case "dontSendmail":
                             IpD.sendMaile = false;
                             jvb = "succes";
+                        break;
+                    case "error":
+                        jvb = IpD.getError();
                         break;
 
                 }
